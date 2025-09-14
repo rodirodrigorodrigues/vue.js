@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue-Project-CDN</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <div>{{ message }}</div>
+    <div v-html="rawHtml"></div>
+    <div :id="dynamicId">Inspecionar</div>
+    <h1>Atributo Disabled</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;"></div>
+    <button :disabled="true" style="padding: 8px 16px; border-radius: 4px;">Botão com valor true</button>
+    <button :disabled="false" style="padding: 8px 16px; border-radius: 4px;">Botão com valor false</button>
+    <button :disabled="" style="padding: 8px 16px; border-radius: 4px;">Botão com valor string vazia</button>
+    <button :disabled="null" style="padding: 8px 16px; border-radius: 4px;">Botão com valor null</button>
+    <button :disabled="undefined" style="padding: 8px 16px; border-radius: 4px;">Botão com valor undefined</button>
+    <button :disabled="0" style="padding: 8px 16px; border-radius: 4px;">Botão com valor 0</button>
+    <button :disabled="1" style="padding: 8px 16px; border-radius: 4px;">Botão com valor 1</button>
+    <button :disabled="[]" style="padding: 8px 16px; border-radius: 4px;">Botão com valor array vazio</button>
+    <button :disabled="[1,2]" style="padding: 8px 16px; border-radius: 4px;">Botão com valor array com
+      elementos</button>
+    <button :disabled="{}" style="padding: 8px 16px; border-radius: 4px;">Botão com valor objeto vazio</button>
+    <button :disabled="{ key: 'value' }" style="padding: 8px 16px; border-radius: 4px;">Botão com valor objeto com
+      propriedades</button>
+    <h1>Atributos Dinâmicos</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+      <button v-bind="objectOfAttributes">Botão com v-bind</button>
+    </div>
+    <h1>Usando expressões JavaScript</h1>
+    <p>{{ number + 5 }}</p>
+    <p>{{ 1 ? 'Yes' : 'No'}}</p>
+    <p>{{ message.split('').reverse().join('') }}</p>
+    <h1>Chamando funções</h1>
+    <button @click="count++" :id="getId()">{{ count }}</button>
+  </div>
+  <script>
+    const { createApp, ref } = Vue
+
+    const app = createApp({
+      setup() {
+        const message = ref('Hello vue!')
+        const rawHtml = '<h1>Vue.js</h1><p>Vue.js é um framework JavaScript progressivo para construir interfaces de usuário.</p>'
+        const dynamicId = ref('dynamic-id')
+        const objectOfAttributes = {
+          id: 'submit-button',
+          class: 'btn btn-primary',
+          type: 'submit',
+          disabled: false
+        }
+        const number = 10;
+        const count = ref(0);
+        const getId = function () {
+          console.log("getId function called");
+          return `button-${count.value}`;
+        }
+        return {
+          message,
+          rawHtml,
+          dynamicId,
+          objectOfAttributes,
+          number,
+          count,
+          getId
+        }
+      }
+    }).mount('#app')
+    // Instância do elemento raiz do Vue id=app
+    console.log("Instância do elemento raiz do Vue: ", app);
+  </script>
+</body>
+
+<style>
+  .btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+  }
+</style>
+
+</html>

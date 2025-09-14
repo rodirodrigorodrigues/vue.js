@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue-Project-CDN</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h1 id="count-el">Count: {{ count }}</h1>
+    <button @click="increment()">Increment</button>
+    <h1>Nested Count: {{ nested.value }}</h1>
+    <button @click="incrementNested()">Increment Nested</button>
+  </div>
+  <script>
+    const { createApp, ref, nextTick } = Vue
+
+    createApp({
+      setup() {
+        const count = ref(2025);
+        const nested = ref({ value: 0 });
+        async function increment() {
+          count.value++;
+          console.log("Antes do nextTick:", document.getElementById("count-el").innerText);
+
+          // Se a lógica depende do que o usuário vê na tela, use await nextTick().
+          // Se depende apenas dos dados reativos, pode seguir sem ele.
+          await nextTick(); // espera o DOM ser atualizado
+
+          console.log("Depois do nextTick:", document.getElementById("count-el").innerText);
+        }
+        function incrementNested() {
+          nested.value.value++;
+        }
+
+        return {
+          count,
+          increment,
+          nested,
+          incrementNested
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+<style>
+</style>
+
+</html>

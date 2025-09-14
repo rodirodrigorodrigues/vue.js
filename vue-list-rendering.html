@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue-Project-CDN</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <ul>
+      <li v-for="(item, index) in items" :key="item.message">{{ index }} - {{ item.message }}</li>
+    </ul>
+    <!-- Podemos usar desestruturação -->
+    <ul>
+      <li v-for="{message} in items" :key="message">{{ message }}</li>
+    </ul>
+    <!-- Iterar sobre as propriedades de um objeto -->
+    <ul>
+      <li v-for="(value, key) in policial" :key="key">{{ key }}: {{ value }}</li>
+    </ul>
+    <!-- v-for com templates -->
+    <ul>
+      <template v-for="(value, key) in policial">
+        <p>Caveiraaa!</p>
+        <li :key="key">{{ key }}: {{ value }}</li>
+      </template>
+    </ul>
+    <!-- v-if com v-for -->
+     <!-- Devemos mover o v-for para um template para o v-if ter acesso ao escopo do v-for -->
+    <ul>
+      <template v-for="(value, key) in policial">
+        <li v-if="key === 'nome'" :key="key">{{ key }}: {{ value }}</li>
+      </template>
+    </ul>
+    <!-- Detecção de alteração de matriz -->
+    <ul>
+      <template v-for="(numero, index) in numeros" :key="index">
+        <li>{{ numero }}</li>
+      </template>
+    </ul>
+    <!-- Métodos mutante, já acionam a reatividade -->
+    <button @click="adicionarNumero()">Adicionar numero</button>
+    <!-- Métodos não mutante, devemos atribuir o array filtrado ao antigo -->
+    <button @click="filtrarPares()">Filtrar pares</button>
+    <!-- Exibir resultados sem mudar o array original -->
+    <ul>
+      <template v-for="(numero, index) in filtrarImpares" :key="index">
+        <li>{{ numero }}</li>
+      </template>
+    </ul>
+  </div>
+  <script>
+    const { createApp, ref, nextTick, computed } = Vue
+
+    createApp({
+      setup() {
+        const items = ref([{ message: 'Foo' }, { message: 'Bar' }])
+        const policial = ref({
+          nome: 'Agente Rodrigo',
+          idade: 29,
+          cargo: 'Policial Militar do Estado de São Paulo',
+          batalhao: 'Batalhão de Choque'
+        })
+        const numeros = ref([1, 2, 3])
+        function adicionarNumero() {
+          numeros.value.push(numeros.value.length + 1)
+        }
+        function filtrarPares() {
+          return numeros.value.filter(numero => numero % 2 === 0)
+        }
+        const filtrarImpares = computed(() => {
+          return numeros.value.filter(numero => numero % 2 !== 0)
+        })
+        return {
+          items,
+          policial,
+          numeros,
+          adicionarNumero,
+          filtrarPares,
+          filtrarImpares
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+<style>
+</style>
+
+</html>

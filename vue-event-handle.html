@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue-Project-CDN</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h2>Manipuladores em linha</h2>
+    <h3>Contagem: {{ count }}</h3>
+    <button @click="count++">Incrementar</button>
+    <h2>Manipuladores de método</h2>
+    <h3>Contagem: {{ count }}</h3>
+    <button @click="decrement">Decrementar</button>
+    <h2>Chamando métodos em manipuladores embutidos</h2>
+    <button @click="say('hello')">Say hello</button>
+    <button @click="say('bye')">Say bye</button>
+    <h2>Acessando evento do Dom</h2>
+    <button @click.prevent="warn('Form cannot be submitted yet.', $event)">
+      Submit
+    </button>
+  </div>
+  <script>
+    const { createApp, ref, nextTick } = Vue
+
+    createApp({
+      setup() {
+        const count = ref(29);
+
+        function decrement() {
+          count.value--;
+        }
+
+        function say(message) {
+          alert(message)
+        }
+
+        function warn(message, event) {
+          console.log(message);
+          console.log(event);
+          alert(message);
+        }
+
+        return {
+          count,
+          decrement,
+          say,
+          warn
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+<style>
+</style>
+
+</html>

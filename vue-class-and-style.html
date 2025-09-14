@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue-Project-CDN</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h2>Utilizando plain class e v-bind:class</h2>
+    <p class="upper" :class="{'text-danger': isNotFound}">404 not found!</p>
+
+    <h2>Utilizando objeto de classes</h2>
+    <p class="upper" :class="success">200 OK</p>
+
+    <h2>Utilizando computed classes</h2>
+    <button :class="dynamicClass" @click="isActive = !isActive">Clique aqui!</button>
+
+    <h2>Vinculação com matrizes</h2>
+    <p :class="[isNotFound ? 'text-danger' : 'text-success', 'upper']">Status: {{ isNotFound ? '404 not found!' : '200 OK' }}</p>
+  </div>
+  <script>
+    const { createApp, ref, nextTick, computed } = Vue
+
+    createApp({
+      setup() {
+        const isNotFound = ref(true);
+        const success = computed(() => {
+          return {
+            'text-success': true,
+          }
+        });
+        const isActive = ref(false);
+        const dynamicClass = computed(() => {
+          return {
+            'text-danger': isActive.value,
+            'text-success': !isActive.value
+          }
+        });
+        return {
+          isNotFound,
+          success,
+          isActive,
+          dynamicClass
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+<style>
+  .upper {
+    text-transform: uppercase;
+  }
+
+  .text-danger {
+    color: red;
+    font-weight: bold;
+  }
+
+  .text-success {
+    color: green;
+    font-weight: bold;
+  }
+</style>
+
+</html>

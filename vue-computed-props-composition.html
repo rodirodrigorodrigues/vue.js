@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue-Project-CDN</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <p>Tem livros?</p>
+    <!-- Problema? Adiciona lógica no template -->
+    <p>{{ author.books.length > 0 ? 'Sim' : 'Não' }}</p>
+    <!-- Solução? Usar computed -->
+    <p>{{ hasPublishedBooks }}</p>
+    <h2>Acessando o valor anterior</h2>
+    <p>{{ countMessage }}</p>
+    <button @click="incrementCount">Incrementar Contagem</button>
+  </div>
+  <script>
+    const { createApp, ref, nextTick, computed } = Vue
+
+    createApp({
+      setup() {
+        const author = ref({
+          name: 'John Doe',
+          books: ['Book 1', 'Book 2', 'Book 3']
+        })
+        const count = ref(0)
+
+        // Computed
+        // Boa prática: evitar lógica complexa no template, usar computed somente para leitura
+        const hasPublishedBooks = computed(() => { return author.value.books.length > 0 ? 'Sim' : 'Não' })
+        const countMessage = computed((previous) => {
+          console.log('Valor anterior:', previous)
+          return `Contagem: ${count.value}`
+        })
+
+        const incrementCount = () => {
+          count.value++
+        }
+
+        return {
+          author,
+          hasPublishedBooks,
+          countMessage,
+          incrementCount
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+<style>
+</style>
+
+</html>

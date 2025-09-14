@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue-Project-CDN</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="awesome = !awesome">Toggle</button>
+
+    <h1 v-if="awesome">Vue is awesome!</h1>
+    <h1 v-else>Oh no 😢</h1>
+
+    <div v-if="type === 'A'">
+      A
+    </div>
+    <div v-else-if="type === 'B'">
+      B
+    </div>
+    <div v-else-if="type === 'C'">
+      C
+    </div>
+    <div v-else>
+      Not A/B/C
+    </div>
+
+    <!-- Por v-ifser uma diretiva, ela precisa ser anexada a um único elemento. -->
+    <template v-if="ok">
+      <h1>Title</h1>
+      <p>Paragraph 1</p>
+      <p>Paragraph 2</p>
+    </template>
+
+    <!-- v-show não suporta o <template>elemento, nem funciona com v-else. -->
+    <h1 v-show="ok">Hello!</h1>
+
+    <button @click="ok = !ok">Toggle OK</button>
+  </div>
+  <script>
+    const { createApp, ref, nextTick, computed } = Vue
+
+    createApp({
+      setup() {
+        const awesome = ref(false);
+        const type = ref('D');
+        const ok = ref(false);
+        return {
+          awesome,
+          type,
+          ok
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+<style>
+  .upper {
+    text-transform: uppercase;
+  }
+
+  .text-danger {
+    color: red;
+    font-weight: bold;
+  }
+
+  .text-success {
+    color: green;
+    font-weight: bold;
+  }
+</style>
+
+</html>

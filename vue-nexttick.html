@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue nextTick Focus Example</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <h2>📝 Lista de Inputs</h2>
+    <button @click="addFieldWithoutNextTick">+ Adicionar (sem nextTick)</button>
+    <button @click="addFieldWithNextTick">+ Adicionar (com nextTick)</button>
+
+    <div v-for="(field, index) in fields" :key="index" style="margin-top:10px;">
+      <input :ref="el => inputRefs[index] = el" type="text" placeholder="Digite algo..." />
+    </div>
+  </div>
+
+  <script>
+    const { createApp, ref, nextTick } = Vue;
+
+    createApp({
+      setup() {
+        const fields = ref([]);
+        const inputRefs = [];
+
+        function addFieldWithoutNextTick() {
+          fields.value.push("");
+          // tenta focar imediatamente
+          const lastInput = inputRefs[fields.value.length - 1];
+          if (lastInput) {
+            lastInput.focus();
+          } else {
+            console.log("⚠️ Sem nextTick: input ainda não existe no DOM!");
+          }
+        }
+
+        async function addFieldWithNextTick() {
+          fields.value.push("");
+          await nextTick(); // espera DOM renderizar
+          const lastInput = inputRefs[fields.value.length - 1];
+          if (lastInput) {
+            lastInput.focus();
+            console.log("✅ Com nextTick: foco aplicado!");
+          }
+        }
+
+        return {
+          fields,
+          inputRefs,
+          addFieldWithoutNextTick,
+          addFieldWithNextTick
+        };
+      }
+    }).mount('#app');
+  </script>
+</body>
+
+</html>
